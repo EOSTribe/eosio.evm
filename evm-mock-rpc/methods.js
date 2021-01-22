@@ -15,22 +15,22 @@ const methods = {
   net_version            : () => api.chainId,
   eth_chainId            : () => '0x' + api.chainId.toString(16),
   eth_accounts           : () => Object.keys(api.ethPrivateKeys),
-  eth_getTransactionCount: async ([address, block]) => await api.eos.getNonce(address),
+  eth_getTransactionCount: async ([address, block]) => await api.eos.getNonce(address.toLowerCase()),
   eth_getCode            : async ([address, block]) => {
     try {
-      const account = await api.eos.getEthAccount(address)
+      const account = await api.eos.getEthAccount(address.toLowerCase())
       return '0x' + Buffer.from(account.code).toString('hex')
     } catch (e) {
       return '0x0'
     }
   },
-  eth_getStorageAt       : async ([address, position, block]) => await api.eos.getStorageAt(address, position),
+  eth_getStorageAt       : async ([address, position, block]) => await api.eos.getStorageAt(address.toLowerCase(), position),
   eth_estimateGas        : async ([{ from, data, value }]) => 2000000,
   eth_gasPrice           : () => "0x1",
 
   eth_getBalance : async ([address, block]) => {
     try {
-      const account = await api.eos.getEthAccount(address)
+      const account = await api.eos.getEthAccount(address.toLowerCase())
       return '0x' + account.balance.toString(16)
     } catch (e) {
       return '0x0'
